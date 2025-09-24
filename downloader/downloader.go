@@ -44,6 +44,8 @@ type Options struct {
 	Aria2Token  string
 	Aria2Method string
 	Aria2Addr   string
+
+	BarWiter io.Writer
 }
 
 // Downloader is the default downloader.
@@ -632,10 +634,13 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 	// After the merge, the file size has changed, so we do not check whether the size matches
 	if mergedFileExists {
 		fmt.Printf("%s: file already exists, skipping\n", mergedFilePath)
-		return nil
+		return fmt.Errorf("%s: file already exists, skipping\n", mergedFilePath)
 	}
 
 	downloader.bar = progressBar(stream.Size)
+	if downloader.option.BarWiter != nil {
+		downloader.bar.SetWriter(downloader.option.BarWiter)
+	}
 	if !downloader.option.Silent {
 		downloader.bar.Start()
 	}
