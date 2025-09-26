@@ -67,7 +67,7 @@ func (d *Data) FillUpStreamsData() {
 		}
 
 		// generate the merged file extension
-		if d.Type == DataTypeVideo && stream.Ext == "" {
+		if stream.Ext == "" {//d.Type == DataTypeVideo && 
 			ext := stream.Parts[0].Ext
 			// The file extension in `Parts` is used as the merged file extension by default, except for the following formats
 			switch ext {
